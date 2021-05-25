@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="demoFlow" doc:id="66c4d9ff-130e-4b63-ae9b-14e665c7c938" >
+		<scheduler doc:name="Scheduler" doc:id="a7be185b-5580-4679-a946-ada50ec51ba4" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger1" doc:id="176e5337-10a2-49cf-8def-87f13eb31380" message="Logger1"/>
+		<flow-ref doc:name="Flow Reference" doc:id="2b4c9ec0-8605-4433-a348-88d8f0d66086" name="demoFlow-impl-continue"/>
+		<logger level="INFO" doc:name="Logger3" doc:id="d79396f7-5800-45c2-8914-c41b258d3367" message="After flow ref logger. Logger 3"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="6a22457a-e556-44dc-b918-71b00ac0744e">
+			<logger level="INFO" doc:name="Logger4" doc:id="2b404cce-0c36-4936-8e0c-670309ea92cc" message="Logger4" />
+		</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="demoFlow-impl-continue" doc:id="50f9c5c3-0968-4cfa-b227-0214026d78e5" >
+		<logger level="INFO" doc:name="Logger2" doc:id="43bc5ced-7d23-44ca-acb8-de1b3c114559" message="#[1/0]"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8b79f968-8a73-4805-82ea-049a3acfdeeb" >
+				<logger level="INFO" doc:name="ExpLogger" doc:id="f30cd93d-3d26-47f1-8ff0-632147ea34c2" message="Inside on error continue" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
